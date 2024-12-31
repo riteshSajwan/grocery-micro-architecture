@@ -1,0 +1,1 @@
+{"level":"error","message":"Tue Dec 31 2024 23:21:41 GMT+0530 (India Standard Time)-{\"expose\":true,\"statusCode\":400,\"status\":400,\"body\":\"{\\n    \\\"email\\\":\\\"test11@test.com\\\",\\n    \\\"password\\\":\\\"12345\\\",\\n}\",\"type\":\"entity.parse.failed\"}","private":true}

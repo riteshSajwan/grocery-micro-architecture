@@ -6,7 +6,7 @@ const UserAuth = require('./middlewares/auth');
 module.exports = (app,channel) => {
     
     const service = new ShoppingService();
-    SubscribeMessage(PublishCustomerEvent,service)
+    SubscribeMessage(channel,service)
 
     app.post('/order',UserAuth, async (req,res,next) => {
 
