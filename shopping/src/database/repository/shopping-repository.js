@@ -1,6 +1,7 @@
 const { OrderModel } = require("../models");
 const { v4: uuidv4 } = require("uuid");
-const { APIError, BadRequestError } = require("../../utils/app-errors");
+const { APIError, BadRequestError,STATUS_CODES } = require("../../utils/app-errors");
+
 
 //Dealing with data base operations
 class ShoppingRepository {
@@ -25,7 +26,7 @@ class ShoppingRepository {
       if (cartItems) return cartItems;
       throw new Error("Data not Found");
     } catch (err) {
-      throw APIError(
+      throw new APIError(
         "API Error",
         STATUS_CODES.INTERNAL_ERROR,
         "Unable to Find Orders"
