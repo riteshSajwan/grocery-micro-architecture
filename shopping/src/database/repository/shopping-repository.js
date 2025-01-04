@@ -1,4 +1,4 @@
-const { OrderModel } = require("../models");
+const { OrderModel, CartModel } = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const { APIError, BadRequestError,STATUS_CODES } = require("../../utils/app-errors");
 
@@ -12,7 +12,7 @@ class ShoppingRepository {
       const orders = await OrderModel.find({ customerId });
       return orders;
     } catch (err) {
-      throw APIError(
+      throw new APIError(
         "API Error",
         STATUS_CODES.INTERNAL_ERROR,
         "Unable to Find Orders"
@@ -34,47 +34,62 @@ class ShoppingRepository {
     }
   }
 
-  async AddCartItem(customerId, item, qty, isRemove) {
-    try {
-      const cart = await CartModel.findOne({ customerId: customerId });
-      const { _id } = item;
-      if (cart) {
+  async AddCartItem(customerId,item,qty,isRemove){
+ 
+    try{
+      // return await CartModel.deleteMany();
+
+    const cart = await CartModel.findOne({ customerId: customerId })
+
+    const { _id } = item;
+
+    if(cart){
+        
         let isExist = false;
+
         let cartItems = cart.items;
-        if (cartItems.length > 0) {
-          cartItems.map((item) => {
-            if (item.product._id.toString() === _id.toString()) {
-              if (isRemove) {
-                cartItems.splice(cartItems.indexOf(item), 1);
-              } else {
-                item.unit = qty;
-              }
-              isExist = true;
-            }
-          });
 
-          if (!isExist && !isRemove) {
-            cartItems.push({product:{...item},unit:qty});
-          }
-          cart.items = cartItems;
-          return await cart.save();
-        } else {
-          return await CartModel.create({
-            customerId,
-            items: [{ product: { ...item }, unit: qty }],
-          });
+
+        if(cartItems.length > 0){
+
+            cartItems.map(item => {
+                                        
+                if(item.product._id.toString() === _id.toString()){
+                    if(isRemove){
+                        cartItems.splice(cartItems.indexOf(item), 1);
+                     }else{
+                       item.unit = qty;
+                    }
+                     isExist = true;
+                }
+            });
+        } 
+        
+        if(!isExist && !isRemove){
+            cartItems.push({product: { ...item}, unit: qty });
         }
-      }
 
-      throw new Error("Unable to add to cart!");
-    } catch (err) {
+        cart.items = cartItems;
+
+        return await cart.save()
+
+    }else{
+
+       return await CartModel.create({
+            customerId,
+            items:[{product: { ...item}, unit: qty }]
+        })
+    }
+    }catch (err) {
       throw new APIError(
         "API Error",
         STATUS_CODES.INTERNAL_ERROR,
-        "Unable to Add Cart Item"
+        "Unable to Find Category"
       );
     }
   }
+
+
 
   async CreateNewOrder(customerId, txnId) {
     //check transaction for payment Status
@@ -116,7 +131,7 @@ class ShoppingRepository {
 
       return {};
     } catch (err) {
-      throw APIError(
+      throw new APIError(
         "API Error",
         STATUS_CODES.INTERNAL_ERROR,
         "Unable to Find Category"

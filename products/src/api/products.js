@@ -1,6 +1,5 @@
 const ProductService = require('../services/product-service');
 const UserAuth = require('./middlewares/auth')
-
 const {PublishMessage} = require('../utils')
 
 const {SHOPPING_BINDING_KEY , CUSTOMER_BINDING_KEY} = require('../config')
@@ -83,6 +82,7 @@ module.exports = (app , channel) => {
     app.delete('/wishlist/:id',UserAuth, async (req,res,next) => {
         const { _id } = req.user;
         const productId = req.params.id;
+        //check if it exist is missing (need to be fixed)
         try {
             const {data} = await service.GetProductPayload(_id,{productId},'REMOVE_FROM_WISHLIST')
             // PublishCustomerEvent(data);
@@ -102,16 +102,13 @@ module.exports = (app , channel) => {
         try {     
             const {data} = await service.GetProductPayload(_id,{productId:req.body._id,qty:req.body.qty},'ADD_TO_CART')
             // PublishCustomerEvent(data);
-            PublishMessage(channel, CUSTOMER_BINDING_KEY , JSON.stringify(data) )
-
             // PublishShoppingEvent(data);
-            PublishMessage(channel, SHOPPING_BINDING_KEY , JSON.stringify(data) )
-
-            const resp = {
-                product:data.data.product,
-                unit:data.data.qty
-            }
-            return res.status(200).json(resp);
+            PublishMessage(channel, CUSTOMER_BINDING_KEY, JSON.stringify(data));
+            PublishMessage(channel, SHOPPING_BINDING_KEY, JSON.stringify(data));
+        
+            const response = { product: data.data.product, unit: data.data.qty };
+        
+            return res.status(200).json(response);
             
         } catch (err) {
             next(err)
@@ -125,9 +122,9 @@ module.exports = (app , channel) => {
         try {
             const {data} = await service.GetProductPayload(_id,{productId:productId,qty:req.body.qty},'REMOVE_FROM_CART')
             // PublishCustomerEvent(data);
+            // PublishShoppingEvent(data);
             PublishMessage(channel, CUSTOMER_BINDING_KEY , JSON.stringify(data) )
 
-            // PublishShoppingEvent(data);
             PublishMessage(channel, SHOPPING_BINDING_KEY , JSON.stringify(data) )
 
             const response = {

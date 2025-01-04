@@ -1,4 +1,4 @@
 module.exports = {
     OrderModel: require('./Order'),
-    OrderModel: require('./Cart'),
+    CartModel: require('./Cart'),
 }
