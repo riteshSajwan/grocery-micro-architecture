@@ -1,2 +1,3 @@
 {"level":"error","message":"Tue Dec 31 2024 23:21:41 GMT+0530 (India Standard Time)-{\"expose\":true,\"statusCode\":400,\"status\":400,\"body\":\"{\\n    \\\"email\\\":\\\"test11@test.com\\\",\\n    \\\"password\\\":\\\"12345\\\",\\n}\",\"type\":\"entity.parse.failed\"}","private":true}
 {"level":"error","message":"Sat Jan 04 2025 11:09:57 GMT+0530 (India Standard Time)-{\"name\":\"Data Not found\",\"statusCode\":{},\"isOperational\":true}","private":true}
+{"level":"error","message":"Sat Jan 04 2025 17:58:36 GMT+0000 (Coordinated Universal Time)-{\"name\":\"Data Not found\",\"statusCode\":{\"name\":\"API Error\",\"statusCode\":500,\"isOperational\":true},\"isOperational\":true}","private":true}
