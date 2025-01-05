@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v2
-      
+
       - name: Create customer Env file
         working-directory: ./customer
         run: |
@@ -49,18 +49,16 @@ jobs:
           
       - name: Generate deployment package
         run: |
-          zip -r deploy.zip . -x '*.git'
-      
-      - name: Deploy on Elastic beanstalk QA Env
+          # Generate the zip package, excluding git files
+          zip -r deploy.zip . -x "*.git*"
+
+      - name: Deploy on Elastic Beanstalk QA Env
         uses: einaregilsson/beanstalk-deploy@v20
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: microservice-grocery
-          environment_name: Microservice-grocery-env 
-          version_label: "ver-${{ github.sha }}"
+          environment_name: Microservice-grocery-env
+          version_label: "ver-${{ github.sha }}-$(date +%Y%m%d%H%M%S)"
           region: eu-central-1
           deployment_package: deploy.zip
-
-      
-        
