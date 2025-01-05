@@ -14,6 +14,11 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v2
 
+      - name: Set version label with date
+        id: set-version-label
+        run: |
+          echo "VERSION_LABEL=ver-${GITHUB_SHA}-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
       - name: Create customer Env file
         working-directory: ./customer
         run: |
@@ -59,6 +64,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: microservice-grocery
           environment_name: Microservice-grocery-env
-          version_label: "ver-${{ github.sha }}-${{ format('YYYYMMDDHHmmss', now()) }}"
+          version_label: ${{ env.VERSION_LABEL }}
           region: ap-south-1
           deployment_package: deploy.zip
