@@ -5,7 +5,7 @@ name: Grocery CI
 
 on:
   pull_request:
-    branches: [ "development" ]
+    branches: [ "main" ]
 
 jobs:
   ci_verification:
