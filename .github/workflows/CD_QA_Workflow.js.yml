@@ -60,5 +60,5 @@ jobs:
           application_name: microservice-grocery
           environment_name: Microservice-grocery-env
           version_label: "ver-${{ github.sha }}-$(date +%Y%m%d%H%M%S)"
-          region: eu-central-1
+          region: ap-south-1
           deployment_package: deploy.zip
