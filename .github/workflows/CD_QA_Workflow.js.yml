@@ -59,6 +59,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: microservice-grocery
           environment_name: Microservice-grocery-env
-          version_label: "ver-${{ github.sha }}"
+          version_label: "ver-${{ github.sha }}-$(date +%Y%m%d%H%M%S)"
           region: ap-south-1
           deployment_package: deploy.zip
